@@ -4,7 +4,7 @@ organization := "net.tiflotecnia.tipa"
 
 version := "0.2"
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.2"
 
 
 resolvers ++= Seq(
@@ -20,6 +20,3 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play" % "2.3.1"
 )
 
-val tipaRepository = Resolver.ssh("TIPA", "tipa.tiflotecnia.net", "/srv/ivy/releases") as("ragb", new File(Path.userHome / ".ssh" / "id_dsa" toString)) withPermissions("0664")
-
-publishTo := Some(tipaRepository)
