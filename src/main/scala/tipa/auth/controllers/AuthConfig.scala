@@ -14,10 +14,10 @@ self : Controller with Auth =>
 
 type UserType
 
-def authenticationFailed(request : RequestHeader) : SimpleResult
+def authenticationFailed(request : RequestHeader) : Result
   
   def authenticationResolvers : Seq[AuthenticationResolver]
   
-  def onUnauthorized(request : RequestHeader) : SimpleResult
+  def onUnauthorized(request : RequestHeader) : Result
   
 }

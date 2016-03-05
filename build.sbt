@@ -4,7 +4,7 @@ organization := "net.tiflotecnia.tipa"
 
 version := "0.2"
 
-scalaVersion := "2.11.2"
+scalaVersion := "2.11.7"
 
 
 resolvers ++= Seq(
@@ -17,6 +17,6 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play" % "2.3.1"
+  "com.typesafe.play" %% "play" % "2.4.3"
 )
 

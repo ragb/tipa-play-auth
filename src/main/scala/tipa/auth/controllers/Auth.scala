@@ -13,10 +13,10 @@ trait Auth extends Controller {
 
   def authenticated(f: => UserType => EssentialAction) = EssentialAction {
     implicit request =>
-        Iteratee.flatten[Array[Byte], SimpleResult] {
+        Iteratee.flatten[Array[Byte], Result] {
           resolveUser(request) map {
             _.fold(
-              (result: SimpleResult) => Done(result, Input.Empty),
+              (result: Result) => Done(result, Input.Empty),
               (user: UserType) =>
                 f(user)(request))
           }
@@ -25,10 +25,10 @@ trait Auth extends Controller {
 
   def maybeAuthenticated(f: => Option[UserType] => EssentialAction) = EssentialAction {
     implicit request =>
-        Iteratee.flatten[Array[Byte], SimpleResult] {
+        Iteratee.flatten[Array[Byte], Result] {
           resolveUser(request) map {
             _.fold(
-              (result: SimpleResult) => f(None)(request),
+              (result: Result) => f(None)(request),
               (user: UserType) =>
                 f(Some(user))(request))
           }
@@ -36,14 +36,14 @@ trait Auth extends Controller {
 
   }
 
-  type AuthorizationRequest = UserType => Future[Either[SimpleResult, Boolean]]
+  type AuthorizationRequest = UserType => Future[Either[Result, Boolean]]
 
   def authorized(authorizationRequest: AuthorizationRequest)(f: => UserType => EssentialAction) = authenticated { user =>
     EssentialAction { implicit request =>
       Iteratee.flatten {
         authorizationRequest(user)
           .map {
-            _.fold((result : SimpleResult) => Done(result, Input.Empty),
+            _.fold((result : Result) => Done(result, Input.Empty),
               auth => {
                 if (auth) {
                   f(user)(request)
@@ -58,7 +58,7 @@ trait Auth extends Controller {
 
   def simpleAuthorizationRequest(f : => UserType => Boolean) : AuthorizationRequest = (user : UserType) => Future.successful(Right(f(user)))
 
-      type AuthenticationResolver = RequestHeader => Future[Either[Option[SimpleResult], UserType]]
+      type AuthenticationResolver = RequestHeader => Future[Either[Option[Result], UserType]]
 
       private def composeAuthenticationResolvers(resolver1 : AuthenticationResolver, resolver2 : AuthenticationResolver) = { request : RequestHeader =>
         resolver1(request) flatMap {_.fold(maybeResult => maybeResult match {
@@ -70,7 +70,7 @@ trait Auth extends Controller {
         } fallbackTo {resolver2(request)}
       }
       
-      def resolveUser(request : RequestHeader) : Future[Either[SimpleResult, UserType]] = {
+      def resolveUser(request : RequestHeader) : Future[Either[Result, UserType]] = {
         authenticationResolvers.reduceLeft(composeAuthenticationResolvers)(request)
         .map {_.left.map{ maybeResult =>
           maybeResult.getOrElse(authenticationFailed(request))
