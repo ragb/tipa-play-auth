@@ -2,9 +2,9 @@ name := "tipa-play-auth"
 
 organization := "net.tiflotecnia.tipa"
 
-version := "0.3"
+version := "0.4"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
 
 resolvers ++= Seq(
@@ -17,6 +17,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play" % "2.4.3"
+  "com.typesafe.play" %% "play" % "2.5.3"
 )
 
+licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))
