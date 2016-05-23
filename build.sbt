@@ -2,7 +2,7 @@ name := "tipa-play-auth"
 
 organization := "net.tiflotecnia.tipa"
 
-version := "0.4"
+version := "0.4.1"
 
 scalaVersion := "2.11.8"
 
